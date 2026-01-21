@@ -1,0 +1,121 @@
+# Harbor Helm Chart Values
+# For use with: helm install harbor harbor/harbor -f values.yaml
+
+expose:
+  type: nodePort  # Change to loadBalancer or ingress for production
+  tls:
+    enabled: false  # Set to true in production
+    certSource: auto
+  nodePort:
+    name: harbor
+    ports:
+      http:
+        port: 80
+        nodePort: 30002
+      https:
+        port: 443
+        nodePort: 30003
+
+# External URL for Harbor (update for production)
+externalURL: http://harbor.local:30002
+
+# Harbor admin password - CHANGE THIS!
+harborAdminPassword: "Harbor12345"
+
+# Persistence settings
+persistence:
+  enabled: true
+  resourcePolicy: "keep"
+  persistentVolumeClaim:
+    registry:
+      storageClass: ""  # Leave empty to use default StorageClass
+      size: 20Gi
+      accessMode: ReadWriteOnce
+    chartmuseum:
+      storageClass: ""
+      size: 5Gi
+      accessMode: ReadWriteOnce
+    jobservice:
+      storageClass: ""
+      size: 1Gi
+      accessMode: ReadWriteOnce
+    database:
+      storageClass: ""
+      size: 5Gi
+      accessMode: ReadWriteOnce
+    redis:
+      storageClass: ""
+      size: 1Gi
+      accessMode: ReadWriteOnce
+    trivy:
+      storageClass: ""
+      size: 5Gi
+      accessMode: ReadWriteOnce
+
+# Database (use internal PostgreSQL)
+database:
+  type: internal
+  internal:
+    password: "changeit"
+
+# Redis (use internal)
+redis:
+  type: internal
+
+# Resource limits (adjust based on your cluster capacity)
+portal:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+core:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 512Mi
+      cpu: 1000m
+
+jobservice:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+registry:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    limits:
+      memory: 512Mi
+      cpu: 500m
+
+chartmuseum:
+  enabled: false  # Disable if not using Helm charts
+
+trivy:
+  enabled: true  # Enable vulnerability scanning
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 200m
+    limits:
+      memory: 1Gi
+      cpu: 1000m
+
+notary:
+  enabled: false  # Enable for image signing in production
+
+# Metrics
+metrics:
+  enabled: false  # Enable for Prometheus integration
+

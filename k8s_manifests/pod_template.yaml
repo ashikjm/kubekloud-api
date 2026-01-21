@@ -1,0 +1,25 @@
+# Example Pod manifest template for container instances
+# This is generated programmatically by k8s_service.py
+# Each cluster gets its own namespace: <cluster-name>-ns
+apiVersion: v1
+kind: Pod
+metadata:
+  name: <instance-name>
+  namespace: <cluster-name>-ns
+  labels:
+    app: <instance-name>
+    managed-by: cmp
+    instance-type: container
+spec:
+  containers:
+  - name: main
+    image: nginx:latest
+    resources:
+      requests:
+        cpu: <cpu>
+        memory: <memory>Mi
+      limits:
+        cpu: <cpu>
+        memory: <memory>Mi
+  restartPolicy: Always
+

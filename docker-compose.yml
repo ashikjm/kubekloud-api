@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://cmp:cmppassword@db:5432/cmp
+      - K8S_NAMESPACE=default
+    volumes:
+      - ./cmp.db:/app/cmp.db
+      - ~/.kube/config:/home/appuser/.kube/config:ro
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=cmp
+      - POSTGRES_PASSWORD=cmppassword
+      - POSTGRES_DB=cmp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubekloud-api-config
+  namespace: kubekloud-api
+data:
+  K8S_NAMESPACE: "default"
+  # Database connection will be constructed from secret values
+  POSTGRES_DB: "kubekloud"
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_PORT: "5432"
+  # Harbor Registry Configuration
+  HARBOR_URL: "harbor.local:30002"
+  HARBOR_PROJECT: "kubekloud"
+

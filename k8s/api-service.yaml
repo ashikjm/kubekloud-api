@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubekloud-api-service
+  namespace: kubekloud-api
+  labels:
+    app: kubekloud-api
+spec:
+  type: LoadBalancer  # Change to ClusterIP if using Ingress
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: kubekloud-api
+

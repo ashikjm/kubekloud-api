@@ -1,0 +1,36 @@
+# Example VirtualMachine manifest template for VM instances
+# This is generated programmatically by k8s_service.py
+# Requires KubeVirt to be installed on the cluster
+# Each cluster gets its own namespace: <cluster-name>-ns
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: <instance-name>
+  namespace: <cluster-name>-ns
+  labels:
+    app: <instance-name>
+    managed-by: cmp
+    instance-type: vm
+spec:
+  running: true
+  template:
+    metadata:
+      labels:
+        kubevirt.io/vm: <instance-name>
+    spec:
+      domain:
+        cpu:
+          cores: <cpu-cores>
+        resources:
+          requests:
+            memory: <memory>Gi
+        devices:
+          disks:
+          - name: containerdisk
+            disk:
+              bus: virtio
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: kubevirt/cirros-container-disk-demo
+

@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kubekloud-api-ingress
+  namespace: kubekloud-api
+  annotations:
+    # Uncomment based on your ingress controller
+    # For nginx:
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+    # For cert-manager (HTTPS):
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx  # Change based on your ingress controller
+  rules:
+  - host: api.kubekloud.example.com  # Change to your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kubekloud-api-service
+            port:
+              number: 80
+  # Uncomment for HTTPS
+  # tls:
+  # - hosts:
+  #   - api.kubekloud.example.com
+  #   secretName: kubekloud-api-tls
+
